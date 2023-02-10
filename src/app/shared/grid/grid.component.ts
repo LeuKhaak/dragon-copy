@@ -46,22 +46,35 @@ export class GridComponent implements OnInit {
     // Example load data from sever
     onGridReady(params: GridReadyEvent) {
         let entity = this.entity;
-        console.log(params);
-        console.log("ENTITY",entity);
+        // console.log(params);
+        // console.log("ENTITY",entity);
 
         this.entityService.fetch(entity)
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((result: GridResponseModel) => {
-                console.log('RES', result);
+                // console.log('RES', result);
+                // console.log('ROW', result.rows[0]);
+                // if (result.rows.length < 10) return; // test fails with this code
                 this.gridData = result.rows;
                 let columns = Object.keys(this.gridData[0]);
+                // columns.push('grg'); // test fails with this code
                 this.columnDefs = this.composecolumnDefs(columns, this.gridData[0]);
+                // if (!this.columnDefs) return;
+
+                // console.log('DEF', this.columnDefs);
+
+                //console.log('DEF', this.columnDefs);
+
         });
     }
 
     composecolumnDefs (columns: string[], rowItem: RowItem): Array<ColDef> {
+        //console.log('COL', columns);
         const columnDefs: Array<ColDef> = [];
         columns.forEach( column => {
+            if (rowItem[column] && rowItem[column].title ) {
+                //console.log('TITLE', rowItem[column].title);
+            }
             columnDefs.push(
                 {
                     headerName: rowItem[column] && rowItem[column].title ? rowItem[column].title : column,
@@ -70,18 +83,26 @@ export class GridComponent implements OnInit {
                 }
             );
         });
+        //console.log('COLDEF', columnDefs);
         return columnDefs;
     }
+
 
     // Example of consuming Grid Event
     onCellClicked( e: CellClickedEvent): void {
         console.log('cellClicked', e);
     }
 
+
+
     // Example using Grid's API
     clearSelection(): void {
         this.agGrid.api.deselectAll();
     }
+
+    pkvg = primaryKeyValueGetter;
+
+    cvg = chooseValueGetter;
 
     /**
      * On destroy

@@ -44,8 +44,8 @@ export class FormComponent implements OnInit {
     @Input('column_mode')
     column_mode!: number;
 
-
     form: FormGroup;
+
     tabs: any;
     tabs_keys:string[] = [];
     records = <RowItem>{};
@@ -88,15 +88,17 @@ export class FormComponent implements OnInit {
 
         this.text_area_editor_storage = {};
         this.form = this._formBuilder.group({});
+        console.log( this.form );
 
     }
 
     ngOnInit(): void {
+        console.log('ENT', this.entity);
         this.entityService.fetch_one(this.entity)
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((result: FormResponseModel) => {
                 this.records = result.item;
-                console.log(result);
+                console.log('FORM RES', result);
 
                 for (const [key_obj, value_obj] of Object.entries(result.item)) {
                     try {
@@ -106,6 +108,7 @@ export class FormComponent implements OnInit {
                         delete this.records[key_obj];
                     }
                 }
+
                 this.entity.model = this.records;
                 this.tabs = result.tabs;
                 this.tabs_keys = Object.keys(result.tabs);

@@ -15,12 +15,12 @@ export class EntityService {
     ) {}
 
     fetch(entity: Entity): Observable<any> {
-        console.log('ENT',this.http.post(this.endpointService.get('entity'), entity))
+        // console.log('PATH', this.endpointService.get('entity'));
+        // console.log('ENT',this.http.post(this.endpointService.get('entity'), entity));
         return this.http.post(this.endpointService.get('entity'), entity);
     }
     fetch_one(entity: Entity): Observable<any> {
         let id = '1';
-        console.log('ENT-ONE',this.http.post(this.endpointService.get('entity/' + id), entity))
         return this.http.post(this.endpointService.get('entity/' + id), entity);
     }
 
